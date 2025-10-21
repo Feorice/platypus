@@ -1,10 +1,6 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
+	"extends": ["../../biome.json"],
 	"files": {
 		"ignoreUnknown": false,
 		"includes": [
@@ -15,17 +11,5 @@
 			"!**/src/routeTree.gen.ts",
 			"!**/src/styles.css"
 		]
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab"
-	},
-	"assist": { "actions": { "source": { "organizeImports": "on" } } },
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true
-		}
-	},
-	"extends": ["../../biome.json"]
+	}
 }
