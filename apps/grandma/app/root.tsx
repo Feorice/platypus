@@ -10,6 +10,8 @@ import {
 
 import { AppNav } from './app-nav';
 
+import { AppLayout } from './components/layout';
+
 export const meta: MetaFunction = () => [
   {
     title: 'New Nx React Router App',
@@ -27,6 +29,15 @@ export const links: LinksFunction = () => [
     rel: 'stylesheet',
     href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
   },
+  {
+    // https://fonts.google.com/specimen/Pinyon+Script
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap',
+  },
+  {
+    rel: 'stylesheet',
+    href: '../styles.css',
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -39,8 +50,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <AppNav />
-        {children}
+        {/* <AppNav />
+        {children} */}
+        <AppLayout>{children}</AppLayout>
         <ScrollRestoration />
         <Scripts />
       </body>
