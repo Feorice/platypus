@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import type React from "react";
-import { Suspense, use, useState, useTransition } from "react";
+import { createFileRoute } from '@tanstack/react-router';
+import type React from 'react';
+import { Suspense, use, useState, useTransition } from 'react';
 
 type ImageData = {
 	id: number;
@@ -8,7 +8,7 @@ type ImageData = {
 	title: string;
 };
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
 	ssr: false,
 	component: App,
 });
@@ -26,16 +26,16 @@ const Button = ({
 	action: () => void;
 	children: React.ReactNode;
 }) => {
-  const [isPending, startTransition] = useTransition();
+	const [isPending, startTransition] = useTransition();
 
 	return (
 		<button
-    disabled={isPending}
+			disabled={isPending}
 			onClick={() => {
-        startTransition(() => {
-          action();
-        })
-      }}
+				startTransition(() => {
+					action();
+				});
+			}}
 			type="button"
 			className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 font-bold text-2xl disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed"
 		>

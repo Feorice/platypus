@@ -27,9 +27,5 @@
 			"recommended": true
 		}
 	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "double"
-		}
-	}
+	"extends": ["../../biome.json"]
 }
