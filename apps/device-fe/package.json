@@ -34,21 +34,30 @@
 				"executor": "nx:run-commands",
 				"options": {
 					"cwd": "apps/device-fe",
-					"command": "biome format"
+					"command": "biome format",
+					"args": [
+						"--write"
+					]
 				}
 			},
 			"lint": {
 				"executor": "nx:run-commands",
 				"options": {
 					"cwd": "apps/device-fe",
-					"command": "biome lint"
+					"command": "biome lint",
+					"args": [
+						"--write"
+					]
 				}
 			},
 			"check": {
 				"executor": "nx:run-commands",
 				"options": {
 					"cwd": "apps/device-fe",
-					"command": "biome check"
+					"command": "biome check",
+					"args": [
+						"--write"
+					]
 				}
 			},
 			"test": {
