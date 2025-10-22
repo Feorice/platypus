@@ -4,12 +4,6 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/grandma-e2e"
-    },
-    {
-      "path": "./apps/grandma"
-    },
-    {
       "path": "./apps/device-fe"
     },
     {
