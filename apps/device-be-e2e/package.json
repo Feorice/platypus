@@ -1,0 +1,27 @@
+{
+  "name": "@platypus/device-be-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "device-be-e2e",
+    "implicitDependencies": [
+      "device-be"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/device-be-e2e/jest.config.ts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "device-be:build",
+          "device-be:serve"
+        ]
+      }
+    }
+  }
+}
