@@ -1,97 +1,107 @@
 {
-  "name": "@platypus/device-be",
-  "version": "0.0.1",
-  "private": true,
-  "nx": {
-    "name": "device-be",
-    "targets": {
-      "build": {
-        "executor": "nx:run-commands",
-        "options": {
-          "command": "webpack-cli build",
-          "args": [
-            "--node-env=production"
-          ],
-          "cwd": "apps/device-be"
-        },
-        "configurations": {
-          "development": {
-            "args": [
-              "--node-env=development"
-            ]
-          }
-        }
-      },
-      "prune-lockfile": {
-        "dependsOn": [
-          "build"
-        ],
-        "cache": true,
-        "executor": "@nx/js:prune-lockfile",
-        "outputs": [
-          "{workspaceRoot}/apps/device-be/dist/package.json",
-          "{workspaceRoot}/apps/device-be/dist/package-lock.json"
-        ],
-        "options": {
-          "buildTarget": "build"
-        }
-      },
-      "copy-workspace-modules": {
-        "dependsOn": [
-          "build"
-        ],
-        "cache": true,
-        "outputs": [
-          "{workspaceRoot}/apps/device-be/dist/workspace_modules"
-        ],
-        "executor": "@nx/js:copy-workspace-modules",
-        "options": {
-          "buildTarget": "build"
-        }
-      },
-      "prune": {
-        "dependsOn": [
-          "prune-lockfile",
-          "copy-workspace-modules"
-        ],
-        "executor": "nx:noop"
-      },
-      "serve": {
-        "continuous": true,
-        "executor": "@nx/js:node",
-        "defaultConfiguration": "development",
-        "dependsOn": [
-          "build"
-        ],
-        "options": {
-          "buildTarget": "device-be:build",
-          "runBuildTargetDependencies": false
-        },
-        "configurations": {
-          "development": {
-            "buildTarget": "device-be:build:development"
-          },
-          "production": {
-            "buildTarget": "device-be:build:production"
-          }
-        }
-      },
-      "test": {
-        "options": {
-          "passWithNoTests": true
-        }
-      }
-    }
-  },
-  "dependencies": {
-    "@nestjs/common": "^11.0.0",
-    "@nestjs/core": "^11.0.0",
-    "@nestjs/platform-express": "^11.0.0",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.0",
-    "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@nestjs/testing": "^11.0.0"
-  }
+	"name": "@platypus/device-be",
+	"version": "0.0.1",
+	"private": true,
+	"nx": {
+		"name": "device-be",
+		"targets": {
+			"build": {
+				"executor": "nx:run-commands",
+				"options": {
+					"command": "webpack-cli build",
+					"args": [
+						"--node-env=production"
+					],
+					"cwd": "apps/device-be"
+				},
+				"configurations": {
+					"development": {
+						"args": [
+							"--node-env=development"
+						]
+					}
+				}
+			},
+			"prune-lockfile": {
+				"dependsOn": [
+					"build"
+				],
+				"cache": true,
+				"executor": "@nx/js:prune-lockfile",
+				"outputs": [
+					"{workspaceRoot}/apps/device-be/dist/package.json",
+					"{workspaceRoot}/apps/device-be/dist/package-lock.json"
+				],
+				"options": {
+					"buildTarget": "build"
+				}
+			},
+			"copy-workspace-modules": {
+				"dependsOn": [
+					"build"
+				],
+				"cache": true,
+				"outputs": [
+					"{workspaceRoot}/apps/device-be/dist/workspace_modules"
+				],
+				"executor": "@nx/js:copy-workspace-modules",
+				"options": {
+					"buildTarget": "build"
+				}
+			},
+			"prune": {
+				"dependsOn": [
+					"prune-lockfile",
+					"copy-workspace-modules"
+				],
+				"executor": "nx:noop"
+			},
+			"serve": {
+				"continuous": true,
+				"executor": "@nx/js:node",
+				"defaultConfiguration": "development",
+				"dependsOn": [
+					"build"
+				],
+				"options": {
+					"buildTarget": "device-be:build",
+					"runBuildTargetDependencies": false
+				},
+				"configurations": {
+					"development": {
+						"buildTarget": "device-be:build:development"
+					},
+					"production": {
+						"buildTarget": "device-be:build:production"
+					}
+				}
+			},
+			"test": {
+				"options": {
+					"passWithNoTests": true
+				}
+			},
+			"check": {
+				"executor": "nx:run-commands",
+				"options": {
+					"cwd": "apps/device-fe",
+					"command": "biome check",
+					"args": [
+						"--write"
+					]
+				}
+			}
+		}
+	},
+	"dependencies": {
+		"@nestjs/common": "^11.0.0",
+		"@nestjs/core": "^11.0.0",
+		"@nestjs/platform-express": "^11.0.0",
+		"reflect-metadata": "^0.1.13",
+		"rxjs": "^7.8.0",
+		"tslib": "^2.3.0"
+	},
+	"devDependencies": {
+		"@nestjs/testing": "^11.0.0"
+	}
 }
