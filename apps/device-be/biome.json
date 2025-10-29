@@ -1,0 +1,20 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
+	"extends": ["../../biome.json"],
+	"files": {
+		"ignoreUnknown": false,
+		"includes": [
+			"**/src/**/*",
+			"**/.vscode/**/*",
+			"**/index.html",
+			"**/vite.config.js",
+			"!**/src/routeTree.gen.ts",
+			"!**/src/styles.css"
+		]
+	},
+	"javascript": {
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": false
+		}
+	}
+}
