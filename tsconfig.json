@@ -4,9 +4,6 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/device-fe"
-    },
-    {
       "path": "./apps/device-be-e2e"
     },
     {
