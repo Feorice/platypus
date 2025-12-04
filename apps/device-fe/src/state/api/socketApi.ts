@@ -21,9 +21,9 @@ const socket = io("http://localhost:3000", {
 	reconnectionAttempts: SOCKET_RECONNECTION_ATTEMPTS,
 });
 
-let dispatcher;
+let dispatcher: any;
 
-const connected = (dispatch?) => {
+const connected = (dispatch?: any) => {
 	if (dispatch) dispatch(resetAttempts());
 	return new Promise<void>((resolve) => {
 		socket.on("connect", resolve);

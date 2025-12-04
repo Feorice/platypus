@@ -1,9 +1,23 @@
 import { api } from "./api";
 
-const dataApi = api.injectEndpoints({
+export const dataApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getTimers: builder.query({
-			query: () => ({ url: "timers" }),
+		getTimers: builder.query<
+			{
+				timers?: {
+					relay: string;
+					id: number;
+					enabled: boolean;
+					isOn: boolean;
+					startTime: string;
+					endTime: string;
+				}[];
+				error?: string;
+				ok: boolean;
+			},
+			void
+		>({
+			query: () => ({ url: "timer" }),
 		}),
 	}),
 });

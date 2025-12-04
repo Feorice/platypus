@@ -16,7 +16,7 @@ import App from "./App.tsx";
 import Header from "./components/Header.tsx";
 import Status from "./pages/Status.tsx";
 import Test from "./pages/Test.tsx";
-import Timers from "./pages/Timers.ts";
+import Timers from "./pages/Timers.tsx";
 import reportWebVitals from "./reportWebVitals.ts";
 
 const rootRoute = createRootRoute({
