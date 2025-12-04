@@ -16,6 +16,7 @@ import App from "./App.tsx";
 import Header from "./components/Header.tsx";
 import Status from "./pages/Status.tsx";
 import Test from "./pages/Test.tsx";
+import Timers from "./pages/Timers.ts";
 import reportWebVitals from "./reportWebVitals.ts";
 
 const rootRoute = createRootRoute({
@@ -46,7 +47,18 @@ const statusRoute = createRoute({
 	component: Status,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, testRoute, statusRoute]);
+const timersRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/timers",
+	component: Timers,
+});
+
+const routeTree = rootRoute.addChildren([
+	indexRoute,
+	testRoute,
+	statusRoute,
+	timersRoute,
+]);
 
 const router = createRouter({
 	routeTree,
