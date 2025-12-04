@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TasksService } from '../tasks/tasks.service';
+import { EntitiesModule } from '../db/entities/entities.module';
+import { HardwareService } from '../services/hardware.service';
+import { SensorService } from '../services/sensor.service';
+import { TasksService } from '../services/tasks.service';
 import { EventsGateway } from './events.gateway';
 
 @Module({
-	providers: [EventsGateway, TasksService],
+	imports: [EntitiesModule],
+	providers: [TasksService, HardwareService, SensorService, EventsGateway],
 })
 export class GatewaysModule {}

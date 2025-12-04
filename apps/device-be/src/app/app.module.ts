@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,13 +7,12 @@ import { AppService } from './app.service';
 import { EntitiesModule } from './db/entities/entities.module';
 import { GatewaysModule } from './gateways/gatesways.module';
 
-console.log(`${__dirname}/db/**/*.entity{.ts,.js}`);
 @Module({
 	imports: [
 		EntitiesModule,
 		TypeOrmModule.forRoot({
 			type: 'better-sqlite3',
-			database: `dist/db/data.db`,
+			database: join(__dirname, '..', '/db/data.db'),
 			autoLoadEntities: true,
 			synchronize: true,
 		}),

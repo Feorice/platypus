@@ -2,21 +2,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-
-import { GenericEntity } from './entity.entity';
+import { GenericEntity } from '../db/entities/generic-entity.entity';
 
 @Injectable()
-export class EntitiesService {
+export class GenericEntityService {
 	constructor(
-    @InjectRepository(GenericEntity)
-    private entityRepository: Repository<GenericEntity>
-  ) { }
+		@InjectRepository(GenericEntity)
+		private entityRepository: Repository<GenericEntity>,
+	) {}
 
 	async findAll(): Promise<GenericEntity[]> {
 		return await this.entityRepository.find();
 	}
 
-	async create(entity: GenericEntity): Promise<GenericEntity> {
+	async create(entity: Partial<GenericEntity>): Promise<GenericEntity> {
 		return await this.entityRepository.save(entity);
 	}
 
@@ -24,7 +23,7 @@ export class EntitiesService {
 		return await this.entityRepository.update(entity.id, entity);
 	}
 
-	async delete(id): Promise<DeleteResult> {
+	async delete(id: number): Promise<DeleteResult> {
 		return await this.entityRepository.delete(id);
 	}
 }

@@ -9,11 +9,11 @@ import {
 import { CronJob } from 'cron';
 import type { Server, Socket } from 'socket.io';
 // biome-ignore lint/style/useImportType: <Nest does not like it when this is import type>
-import { TasksService } from '../tasks/tasks.service';
-
-const getRandomNumber = (min: number, max: number) => {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+import { HardwareService } from '../services/hardware.service';
+// biome-ignore lint/style/useImportType: <Nest does not like it when this is import type>
+import { SensorService } from '../services/sensor.service';
+// biome-ignore lint/style/useImportType: <Nest does not like it when this is import type>
+import { TasksService } from '../services/tasks.service';
 
 @WebSocketGateway({
 	cors: {
@@ -26,17 +26,21 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	@WebSocketServer()
 	server!: Server;
 
-	constructor(private tasksService: TasksService) {
-		tasksService.addJob(
+	constructor(
+		private tasksService: TasksService,
+		private hardwareService: HardwareService,
+		private sensorService: SensorService,
+	) {
+		this.createDefaultJobs();
+	}
+
+	createDefaultJobs() {
+		this.tasksService.addJob(
 			'sensor:DHT22',
-			new CronJob(CronExpression.EVERY_SECOND, () => {
-				const temperatureValue = getRandomNumber(70, 75);
-				const humidityValue = getRandomNumber(30, 35);
-				this.server.sockets.emit('sensor:DHT22', {
-					temperature: temperatureValue,
-					humidity: humidityValue,
-					scale: 'C',
-				});
+			new CronJob(CronExpression.EVERY_SECOND, async () => {
+				const sensorData = await this.hardwareService.getSensorData();
+				await this.sensorService.create(sensorData);
+				this.server.sockets.emit('sensor:DHT22', sensorData);
 			}),
 		);
 	}

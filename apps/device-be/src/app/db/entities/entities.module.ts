@@ -1,12 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EntitiesController } from './entities/entities.controller';
-import { EntitiesService } from './entities/entities.service';
-import { GenericEntity } from './entities/entity.entity';
+import { GenericEntity } from './generic-entity.entity';
+import { RelayEntity } from './relay.entity';
+import { SensorEntity } from './sensor.entity';
+import { TimerEntity } from './timer.entity';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([GenericEntity])],
-	providers: [EntitiesService],
-	controllers: [EntitiesController],
+	imports: [
+		TypeOrmModule.forFeature([
+			GenericEntity,
+			TimerEntity,
+			SensorEntity,
+			RelayEntity,
+		]),
+	],
+	exports: [TypeOrmModule],
+	providers: [],
+	controllers: [],
 })
 export class EntitiesModule {}
