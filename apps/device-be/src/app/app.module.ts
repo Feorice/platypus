@@ -4,8 +4,10 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TimerController } from './controllers/timer.controller';
 import { EntitiesModule } from './db/entities/entities.module';
 import { GatewaysModule } from './gateways/gatesways.module';
+import { TimerService } from './services/timer.service';
 
 @Module({
 	imports: [
@@ -19,7 +21,7 @@ import { GatewaysModule } from './gateways/gatesways.module';
 		ScheduleModule.forRoot(),
 		GatewaysModule,
 	],
-	controllers: [AppController],
-	providers: [AppService],
+	controllers: [AppController, TimerController],
+	providers: [AppService, TimerService],
 })
 export class AppModule {}

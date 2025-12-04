@@ -7,36 +7,37 @@ import {
 	Post,
 	Put,
 } from '@nestjs/common';
+import type { DeleteResult, UpdateResult } from 'typeorm';
 // biome-ignore lint/style/useImportType: <explanation>
 import { TimerEntity } from '../db/entities/timer.entity';
 // biome-ignore lint/style/useImportType: <explanation>
-import { TimerService } from '../services/timer.service';
+import { TimerResponse, TimerService } from '../services/timer.service';
 
-@Controller('entities')
+@Controller('timer')
 export class TimerController {
-	constructor(private entitiesService: TimerService) {}
+	constructor(private timerService: TimerService) {}
 
 	@Get()
-	index(): Promise<TimerEntity[]> {
-		return this.entitiesService.findAll();
+	index(): Promise<TimerResponse> {
+		return this.timerService.findAll();
 	}
 
 	@Post('create')
-	async create(@Body() entityData: TimerEntity): Promise<any> {
-		return this.entitiesService.create(entityData);
+	async create(@Body() entityData: TimerEntity): Promise<TimerResponse> {
+		return this.timerService.create(entityData);
 	}
 
 	@Put(':id/update')
 	async update(
 		@Param('id') id: number,
 		@Body() entityData: TimerEntity,
-	): Promise<any> {
+	): Promise<UpdateResult> {
 		entityData.id = Number(id);
-		return this.entitiesService.update(entityData);
+		return this.timerService.update(entityData);
 	}
 
 	@Delete(':id/delete')
-	async delete(@Param('id') id: number): Promise<any> {
-		return this.entitiesService.delete(id);
+	async delete(@Param('id') id: number): Promise<DeleteResult> {
+		return this.timerService.delete(id);
 	}
 }

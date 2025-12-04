@@ -1,28 +1,24 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
+
+enum RelayName {
+	RELAY_ONE = 'RELAY_ONE',
+	RELAY_TWO = 'RELAY_TWO',
+	RELAY_THREE = 'RELAY_THREE',
+	RELAY_FOUR = 'RELAY_FOUR',
+}
 
 @Entity()
 export class TimerEntity {
-	constructor(
-		id: number,
-		relay: string,
-		enabled: boolean,
-		isOn: boolean,
-		startTime: Date,
-		endTime: Date,
-	) {
-		this.id = id;
-		this.relay = relay;
-		this.enabled = enabled;
-		this.isOn = isOn;
-		this.startTime = startTime;
-		this.endTime = endTime;
-	}
-
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column()
-	relay: string;
+	@Column({ unique: true, type: 'simple-enum', enum: RelayName })
+	relay: RelayName;
 
 	@Column()
 	enabled: boolean;
@@ -30,9 +26,9 @@ export class TimerEntity {
 	@Column()
 	isOn: boolean;
 
-	@Column()
+	@CreateDateColumn()
 	startTime: Date;
 
-	@Column()
+	@CreateDateColumn()
 	endTime: Date;
 }
