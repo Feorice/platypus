@@ -1,0 +1,1 @@
+export const SOCKET_RECONNECTION_ATTEMPTS = 5;
