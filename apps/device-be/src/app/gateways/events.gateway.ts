@@ -28,29 +28,30 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	constructor(private tasksService: TasksService) {
 		tasksService.addJob(
-			'atmosphere',
+			'sensor:DHT22',
 			new CronJob(CronExpression.EVERY_SECOND, () => {
-				const value = getRandomNumber(70, 75);
-				this.server.sockets.emit('atmosphere:data', {
-					temperature: value,
-					humidity: 35,
+				const temperatureValue = getRandomNumber(70, 75);
+				const humidityValue = getRandomNumber(30, 35);
+				this.server.sockets.emit('sensor:DHT22', {
+					temperature: temperatureValue,
+					humidity: humidityValue,
 					scale: 'C',
 				});
 			}),
 		);
 	}
 
-	handleConnection(client: Socket, ...args: any[]): any {
+	handleConnection(client: Socket): void {
 		this.logger.log(`${client.id} connected`);
-		this.tasksService.startJob('atmosphere');
+		this.tasksService.startJob('sensor:DHT22');
 	}
 
-	async handleDisconnect(client: Socket, ...args: any[]): Promise<void> {
+	async handleDisconnect(client: Socket): Promise<void> {
 		this.logger.log(`${client.id} disconnected`);
 		const noClients = !(await this.server.sockets.fetchSockets()).length;
 
 		if (noClients) {
-			this.tasksService.stopJob('atmosphere');
+			this.tasksService.stopJob('sensor:DHT22');
 		}
 	}
 }

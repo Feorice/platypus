@@ -14,7 +14,7 @@
 	},
 	"javascript": {
 		"parser": {
-			"unsafeParameterDecoratorsEnabled": false
+			"unsafeParameterDecoratorsEnabled": true
 		}
 	}
 }
