@@ -124,6 +124,32 @@ export const SocketApi = createApi({
 				socket.off("timer", listener);
 			},
 		}),
+		serverStatsEvents: build.query<{ localTime: string }, void>({
+			queryFn() {
+				return { data: { localTime: "" } };
+			},
+			async onCacheEntryAdded(
+				_arg,
+				{ dispatch, cacheEntryRemoved, updateCachedData, cacheDataLoaded },
+			) {
+				await cacheDataLoaded;
+				dispatcher = dispatch;
+				await connected(dispatcher);
+
+				const listener = (data: { localTime: string }) => {
+					updateCachedData((currentCacheData) => {
+						return {
+							...currentCacheData,
+							...data,
+						};
+					});
+				};
+
+				socket.on("server:stats", listener);
+				await cacheEntryRemoved;
+				socket.off("server:stats", listener);
+			},
+		}),
 		status: build.query<{ connected: boolean }, void>({
 			queryFn() {
 				return { data: { connected: socket.connected } };
@@ -161,4 +187,5 @@ export const {
 	useDHT22SensorEventsQuery,
 	useStatusQuery,
 	useLazyRetryQuery,
+	useServerStatsEventsQuery,
 } = SocketApi;

@@ -15,18 +15,23 @@ import {
 	FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label.tsx";
+import type { ITimer } from "@/lib/types.ts";
 import { cn } from "@/lib/utils";
+import { TimeRangePicker } from "../components/time-range-picker.tsx";
+import { Checkbox } from "../components/ui/checkbox.tsx";
 
 export function Timer({
 	className,
 	timer,
 	...props
-}: ComponentProps<"div"> & { timer: any }) {
+}: ComponentProps<"div"> & { timer: ITimer }) {
+	console.log("timer", timer);
 	return (
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
 			<Card>
 				<CardHeader className="text-center">
-					<CardTitle className="text-xl">Welcome back</CardTitle>
+					<CardTitle className="text-xl">{timer.name || timer.relay}</CardTitle>
 					<CardDescription>
 						Login with your Apple or Google account
 					</CardDescription>
@@ -35,6 +40,16 @@ export function Timer({
 					<form>
 						<FieldGroup>
 							<Field>
+								<TimeRangePicker
+									initialDateFrom={new Date(timer.startTime)}
+									initialDateTo={new Date(timer.endTime)}
+								/>
+
+								<div className="flex items-center gap-3">
+									<Checkbox id="enable" />
+									<Label htmlFor="enable">Enable</Label>
+								</div>
+
 								<Button variant="outline" type="button">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 										<path

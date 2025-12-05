@@ -43,11 +43,21 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				this.server.sockets.emit('sensor:DHT22', sensorData);
 			}),
 		);
+
+		this.tasksService.addJob(
+			'server:stats',
+			new CronJob(CronExpression.EVERY_SECOND, async () => {
+				this.server.sockets.emit('server:stats', {
+					localTime: new Date().toString(),
+				});
+			}),
+		);
 	}
 
 	handleConnection(client: Socket): void {
 		this.logger.log(`${client.id} connected`);
 		this.tasksService.startJob('sensor:DHT22');
+		this.tasksService.startJob('server:stats');
 	}
 
 	async handleDisconnect(client: Socket): Promise<void> {

@@ -17,6 +17,9 @@ export class TimerEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
+	@Column({ nullable: true })
+	name: string;
+
 	@Column({ unique: true, type: 'simple-enum', enum: RelayName })
 	relay: RelayName;
 
