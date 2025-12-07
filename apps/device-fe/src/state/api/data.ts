@@ -13,7 +13,31 @@ export const dataApi = api.injectEndpoints({
 		>({
 			query: () => ({ url: "timer" }),
 		}),
+		createTimer: builder.mutation<ITimer, ITimer>({
+			query: (data) => ({
+				url: "timer/create",
+				method: "POST",
+				body: data,
+			}),
+		}),
+		updateTimer: builder.mutation<ITimer, Partial<ITimer> & Pick<ITimer, "id">>(
+			{
+				query: ({ id, ...patch }) => ({
+					url: `timer/${id}/update`,
+					method: "PUT",
+					body: patch,
+				}),
+				invalidatesTags: ["Timers"],
+				transformResponse: (response: { data: ITimer }) => response.data,
+				async onQueryStarted(arg, {}) {},
+				async onCacheEntryAdded(arg, {}) {},
+			},
+		),
 	}),
 });
 
-export const { useGetTimersQuery } = dataApi;
+export const {
+	useGetTimersQuery,
+	useUpdateTimerMutation,
+	useCreateTimerMutation,
+} = dataApi;

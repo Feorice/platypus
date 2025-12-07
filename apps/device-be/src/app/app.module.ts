@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { TimerController } from './controllers/timer.controller';
 import { EntitiesModule } from './db/entities/entities.module';
 import { GatewaysModule } from './gateways/gatesways.module';
+import { TasksService } from './services/tasks.service';
 import { TimerService } from './services/timer.service';
 
 @Module({
@@ -22,6 +23,6 @@ import { TimerService } from './services/timer.service';
 		GatewaysModule,
 	],
 	controllers: [AppController, TimerController],
-	providers: [AppService, TimerService],
+	providers: [AppService, TimerService, TasksService],
 })
 export class AppModule {}

@@ -18,14 +18,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label.tsx";
 import type { ITimer } from "@/lib/types.ts";
 import { cn } from "@/lib/utils";
-import { TimeRangePicker } from "../components/time-range-picker.tsx";
+import {
+	type DateTimeRange,
+	TimeRangePicker,
+} from "../components/time-range-picker.tsx";
 import { Checkbox } from "../components/ui/checkbox.tsx";
 
 export function Timer({
 	className,
 	timer,
+	onUpdate,
 	...props
-}: ComponentProps<"div"> & { timer: ITimer }) {
+}: ComponentProps<"div"> & {
+	timer: ITimer;
+	onUpdate?: (values: { range: DateTimeRange; id: string }) => void;
+}) {
 	console.log("timer", timer);
 	return (
 		<div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -41,6 +48,9 @@ export function Timer({
 						<FieldGroup>
 							<Field>
 								<TimeRangePicker
+									onUpdate={(update) =>
+										onUpdate?.({ range: update.range, id: timer.id })
+									}
 									initialDateFrom={new Date(timer.startTime)}
 									initialDateTo={new Date(timer.endTime)}
 								/>

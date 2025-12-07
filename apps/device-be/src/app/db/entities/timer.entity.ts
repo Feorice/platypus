@@ -20,8 +20,12 @@ export class TimerEntity {
 	@Column({ nullable: true })
 	name: string;
 
-	@Column({ unique: true, type: 'simple-enum', enum: RelayName })
-	relay: RelayName;
+	// TODO: We'll use this at some point  after we actually get the hardware shit taken care of.
+	// @Column({ unique: true, type: 'simple-enum', enum: RelayName })
+	// relay: RelayName;
+
+	@Column({ nullable: true })
+	relay: string;
 
 	@Column()
 	enabled: boolean;

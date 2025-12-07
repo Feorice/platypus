@@ -43,9 +43,7 @@ const getDateAdjustedForTimezone = (
 		const parts = dateInput.split("-").map((part) => Number.parseInt(part, 10));
 		return new Date(parts[0], parts[1] - 1, parts[2]);
 	}
-	console.log("getDateAdjustedForTimezone dateInput", dateInput);
 	const newDate = new Date(dateInput);
-	console.log("getDateAdjustedForTimezone newDate", newDate);
 	return newDate;
 };
 
@@ -57,13 +55,11 @@ export const TimeRangePicker: React.FC<TimeRangePickerProps> = ({
 	locale = enUS,
 	className,
 }) => {
-	console.log(initialDateFrom);
 	const [isOpen, setIsOpen] = React.useState(false);
 	const [range, setRange] = React.useState<DateTimeRange>({
 		from: getDateAdjustedForTimezone(initialDateFrom),
 		to: getDateAdjustedForTimezone(initialDateTo),
 	});
-	console.log("range", range);
 	const openedRangeRef = React.useRef<DateTimeRange>(range);
 
 	const resetValues = (): void => {
@@ -85,7 +81,7 @@ export const TimeRangePicker: React.FC<TimeRangePickerProps> = ({
 		if (isOpen) {
 			openedRangeRef.current = range;
 		}
-	}, [isOpen, range]);
+	}, [isOpen]);
 
 	const handleFromDateTimeChange = (date: Date) => {
 		setRange((prev) => ({ ...prev, from: date }));
