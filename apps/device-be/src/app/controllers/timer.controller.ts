@@ -7,7 +7,7 @@ import {
 	Post,
 	Put,
 } from '@nestjs/common';
-import { CronJob } from 'cron';
+import { CronJob, CronTime } from 'cron';
 import type { DeleteResult, UpdateResult } from 'typeorm';
 // biome-ignore lint/style/useImportType: <explanation>
 import { TimerEntity } from '../db/entities/timer.entity';
@@ -30,25 +30,29 @@ export class TimerController {
 
 	@Post('create')
 	async create(@Body() entityData: TimerEntity): Promise<TimerResponse> {
-    const data = {
-      ...entityData,
-      relay: `${entityData.relay}:${entityData.name}`,
-    };
+		const data = {
+			...entityData,
+			relay: `${entityData.relay}:${entityData.name}`,
+		};
 
 		if (entityData.enabled) {
-
 			const startTime = new Date(data.startTime);
 			const endTime = new Date(data.endTime);
+			const cronStartTime = `${startTime.getMinutes()} ${startTime.getHours()} * * *`;
+			const cronEndTime = `${endTime.getMinutes()} ${endTime.getHours()} * * *`;
+
+			console.log('cronStartTime', cronStartTime);
 			this.taskService.addJob(
 				`${data.relay}:START`,
-				new CronJob(startTime, () => {
+				new CronJob(cronStartTime, () => {
 					console.log('running start timer');
 				}),
 			);
 
+			console.log('cronEndTime', cronEndTime);
 			this.taskService.addJob(
 				`${data.relay}:END`,
-				new CronJob(endTime, () => {
+				new CronJob(cronEndTime, () => {
 					console.log('running end timer');
 				}),
 			);
@@ -66,6 +70,28 @@ export class TimerController {
 		@Body() entityData: TimerEntity,
 	): Promise<UpdateResult> {
 		entityData.id = Number(id);
+
+		const entityResponse = await this.timerService.findOne(entityData.id);
+		const entity = entityResponse.timers[0];
+
+		const startTimer = this.taskService.getJob(`${entity.relay}:START`);
+		const endTimer = this.taskService.getJob(`${entity.relay}:END`);
+		console.log('update timers', entity);
+		const startTime = new Date(entityData.startTime);
+		const endTime = new Date(entityData.endTime);
+		const cronStartTime = `${startTime.getMinutes()} ${startTime.getHours()} * * *`;
+		const cronEndTime = `${endTime.getMinutes()} ${endTime.getHours()} * * *`;
+
+		console.log('startCron', startTimer || 'shits undefined');
+		console.log('endCron', endTimer || 'shits undefined');
+		if (startTimer) {
+			startTimer.setTime(new CronTime(cronStartTime));
+		}
+
+		if (endTimer) {
+			endTimer.setTime(new CronTime(cronEndTime));
+		}
+
 		return this.timerService.update(entityData);
 	}
 

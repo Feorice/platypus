@@ -11,7 +11,7 @@ import {
 import { TimerEntity } from '../db/entities/timer.entity';
 
 export interface TimerResponse {
-	timers?: TimerEntity[];
+	timers: TimerEntity[];
 	error?: string;
 	ok: boolean;
 }
@@ -31,11 +31,37 @@ export class TimerService {
 		};
 	}
 
+	async findOne(id: number): Promise<TimerResponse> {
+		try {
+			const timer = await this.timerRepository.findOne({ where: { id } });
+
+			if (timer) {
+				return {
+					timers: [timer],
+					ok: true,
+				};
+			}
+
+			return {
+				timers: [],
+				ok: true,
+			};
+		} catch (error) {
+			console.log(error);
+
+			return {
+				timers: [],
+				ok: false,
+			};
+		}
+	}
+
 	async create(entity: TimerEntity): Promise<TimerResponse> {
 		try {
 			const count = await this.timerRepository.count();
 			if (count >= 4) {
 				return {
+					timers: [],
 					error: 'Cannot create more than 4 timers.',
 					ok: false,
 				};
@@ -47,6 +73,7 @@ export class TimerService {
 			};
 		} catch (error) {
 			return {
+				timers: [],
 				error: (error as QueryFailedError).message,
 				ok: false,
 			};
