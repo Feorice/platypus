@@ -1,14 +1,36 @@
 /** biome-ignore-all lint/style/useImportType: <explanation> */
 import { Injectable, Logger } from '@nestjs/common';
+import Sensor from 'node-dht-sensor';
 import type { Relay, RelayName, RelayState } from '../lib/types';
 import { SensorDataResponse } from './sensor.service';
 
 @Injectable()
 export class HardwareService {
 	async getSensorData() {
-		// const sensorEntity = await this.sensorService.create(data);
-		// Logger.debug('sensorEntity', sensorEntity);
-		return this.getAtmosphereData();
+		const sensorPromise = Sensor.promises;
+
+		sensorPromise.setMaxRetries(10);
+		if (process.env.NODE_ENV !== 'development') {
+			const testOptions = {
+				test: {
+					fake: {
+						temperature: this.getRandomNumber(20, 25),
+						humidity: this.getRandomNumber(55, 60),
+					},
+				},
+			};
+			sensorPromise.initialize(testOptions);
+		} else {
+			sensorPromise.initialize(22, 4);
+		}
+
+		const data = await sensorPromise.read(22, 4);
+		return {
+			scale: 'C',
+			temperature: data.temperature,
+			humidity: data.humidity,
+		};
+		// return this.getAtmosphereData();
 	}
 
 	getRelayDefaultConfig() {
