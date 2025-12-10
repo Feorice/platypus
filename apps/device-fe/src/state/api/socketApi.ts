@@ -17,7 +17,7 @@ export interface DHT22Data {
 	scale?: "C" | "F";
 }
 
-const socket = io("http://localhost:3000", {
+const socket = io("http://192.168.86.96:3000", {
 	reconnectionAttempts: SOCKET_RECONNECTION_ATTEMPTS,
 });
 

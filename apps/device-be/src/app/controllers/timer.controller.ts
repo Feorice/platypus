@@ -15,12 +15,14 @@ import { TimerEntity } from '../db/entities/timer.entity';
 import { TasksService } from '../services/tasks.service';
 // biome-ignore lint/style/useImportType: <explanation>
 import { TimerResponse, TimerService } from '../services/timer.service';
+import { HardwareService } from '../services/hardware.service';
 
 @Controller('timer')
 export class TimerController {
 	constructor(
 		private timerService: TimerService,
 		private taskService: TasksService,
+		private hardwareService: HardwareService
 	) {}
 
 	@Get()
@@ -46,6 +48,7 @@ export class TimerController {
 				`${data.relay}:START`,
 				new CronJob(cronStartTime, () => {
 					console.log('running start timer');
+					this.hardwareService.setRelay(0)
 				}),
 			);
 
@@ -54,6 +57,7 @@ export class TimerController {
 				`${data.relay}:END`,
 				new CronJob(cronEndTime, () => {
 					console.log('running end timer');
+					this.hardwareService.setRelay(1)
 				}),
 			);
 

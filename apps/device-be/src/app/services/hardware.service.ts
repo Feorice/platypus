@@ -3,14 +3,19 @@ import { Injectable, Logger } from '@nestjs/common';
 import Sensor from 'node-dht-sensor';
 import type { Relay, RelayName, RelayState } from '../lib/types';
 import { SensorDataResponse } from './sensor.service';
+import {RIO} from 'rpi-io'
 
 @Injectable()
 export class HardwareService {
+	constructor() {
+
+
+	}
 	async getSensorData() {
 		const sensorPromise = Sensor.promises;
 
 		sensorPromise.setMaxRetries(10);
-		if (process.env.NODE_ENV !== 'development') {
+		if (process.env.NODE_ENV === 'development') {
 			const testOptions = {
 				test: {
 					fake: {
@@ -21,16 +26,27 @@ export class HardwareService {
 			};
 			sensorPromise.initialize(testOptions);
 		} else {
-			sensorPromise.initialize(22, 4);
+			sensorPromise.initialize(22, 17);
 		}
 
-		const data = await sensorPromise.read(22, 4);
-		return {
-			scale: 'C',
-			temperature: data.temperature,
-			humidity: data.humidity,
-		};
-		// return this.getAtmosphereData();
+		try {
+			const data = await sensorPromise.read(22, 17);
+
+			return {
+				scale: 'C',
+				temperature: data.temperature,
+				humidity: data.humidity,
+			};
+		} catch (error) {
+			Logger.error(error)
+			return null;
+		}
+	}
+
+	setRelay(level:number) {
+		new RIO(18, "output", {value: level});
+
+		RIO.closeAll();
 	}
 
 	getRelayDefaultConfig() {

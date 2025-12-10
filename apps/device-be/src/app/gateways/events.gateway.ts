@@ -14,6 +14,7 @@ import { HardwareService } from '../services/hardware.service';
 import { SensorService } from '../services/sensor.service';
 // biome-ignore lint/style/useImportType: <Nest does not like it when this is import type>
 import { TasksService } from '../services/tasks.service';
+import { SensorEntity } from '../db/entities/sensor.entity';
 
 @WebSocketGateway({
 	cors: {
@@ -32,15 +33,20 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		private sensorService: SensorService,
 	) {
 		this.createDefaultJobs();
+		this.startDefaultJobs();
 	}
 
 	createDefaultJobs() {
 		this.tasksService.addJob(
 			'sensor:DHT22',
-			new CronJob(CronExpression.EVERY_SECOND, async () => {
+			new CronJob(CronExpression.EVERY_5_SECONDS, async () => {
 				const sensorData = await this.hardwareService.getSensorData();
-				await this.sensorService.create(sensorData);
-				this.server.sockets.emit('sensor:DHT22', sensorData);
+
+				if (sensorData) {
+					await this.sensorService.create(sensorData as Partial<SensorEntity>);
+					this.server.sockets.emit('sensor:DHT22', sensorData);
+				}
+				
 			}),
 		);
 
@@ -54,18 +60,28 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		);
 	}
 
-	handleConnection(client: Socket): void {
-		this.logger.log(`${client.id} connected`);
-		this.tasksService.startJob('sensor:DHT22');
-		this.tasksService.startJob('server:stats');
+	startDefaultJobs() {
+		this.tasksService.startJob('sensor:DHT22')
+		this.tasksService.startJob('server:stats')
+	}
+
+	async handleConnection(client: Socket): Promise<void> {
+		// this.logger.log(`${client.id} connected`);
+
+		// const clientCount = (await this.server.sockets.fetchSockets()).length
+		// Logger.debug({clientCount})
+		// if (!clientCount) {
+		// 	this.tasksService.startJob('sensor:DHT22');
+		// 	this.tasksService.startJob('server:stats');
+		// }
 	}
 
 	async handleDisconnect(client: Socket): Promise<void> {
-		this.logger.log(`${client.id} disconnected`);
-		const noClients = !(await this.server.sockets.fetchSockets()).length;
+		// this.logger.log(`${client.id} disconnected`);
+		// const clientCount = (await this.server.sockets.fetchSockets()).length;
 
-		if (noClients) {
-			this.tasksService.stopJob('sensor:DHT22');
-		}
+		// if (!clientCount) {
+		// 	this.tasksService.stopJob('sensor:DHT22');
+		// }
 	}
 }
