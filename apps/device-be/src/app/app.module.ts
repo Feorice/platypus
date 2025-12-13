@@ -7,9 +7,10 @@ import { AppService } from './app.service';
 import { TimerController } from './controllers/timer.controller';
 import { EntitiesModule } from './db/entities/entities.module';
 import { GatewaysModule } from './gateways/gatesways.module';
+import { BootService } from './services/boot.service';
+import { HardwareService } from './services/hardware.service';
 import { TasksService } from './services/tasks.service';
 import { TimerService } from './services/timer.service';
-import { HardwareService } from './services/hardware.service';
 
 @Module({
 	imports: [
@@ -24,6 +25,12 @@ import { HardwareService } from './services/hardware.service';
 		GatewaysModule,
 	],
 	controllers: [AppController, TimerController],
-	providers: [AppService, TimerService, TasksService, HardwareService],
+	providers: [
+		BootService,
+		AppService,
+		TimerService,
+		TasksService,
+		HardwareService,
+	],
 })
 export class AppModule {}
