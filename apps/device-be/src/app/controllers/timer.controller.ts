@@ -22,7 +22,7 @@ export class TimerController {
 	constructor(
 		private timerService: TimerService,
 		private taskService: TasksService,
-		private hardwareService: HardwareService
+		private hardwareService: HardwareService,
 	) {}
 
 	@Get()
@@ -48,7 +48,7 @@ export class TimerController {
 				`${data.relay}:START`,
 				new CronJob(cronStartTime, () => {
 					console.log('running start timer');
-					this.hardwareService.setRelay(0)
+					this.hardwareService.setRelay(0);
 				}),
 			);
 
@@ -57,7 +57,7 @@ export class TimerController {
 				`${data.relay}:END`,
 				new CronJob(cronEndTime, () => {
 					console.log('running end timer');
-					this.hardwareService.setRelay(1)
+					this.hardwareService.setRelay(1);
 				}),
 			);
 

@@ -1,20 +1,15 @@
 /** biome-ignore-all lint/style/useImportType: <explanation> */
 import { Injectable, Logger } from '@nestjs/common';
 import Sensor from 'node-dht-sensor';
+import { RIO } from 'rpi-io';
 import type { Relay, RelayName, RelayState } from '../lib/types';
-import { SensorDataResponse } from './sensor.service';
-import {RIO} from 'rpi-io'
 
 @Injectable()
 export class HardwareService {
-	constructor() {
-
-
-	}
 	async getSensorData() {
 		const sensorPromise = Sensor.promises;
-
 		sensorPromise.setMaxRetries(10);
+
 		if (process.env.NODE_ENV === 'development') {
 			const testOptions = {
 				test: {
@@ -24,6 +19,7 @@ export class HardwareService {
 					},
 				},
 			};
+
 			sensorPromise.initialize(testOptions);
 		} else {
 			sensorPromise.initialize(22, 17);
@@ -38,13 +34,13 @@ export class HardwareService {
 				humidity: data.humidity,
 			};
 		} catch (error) {
-			Logger.error(error)
+			Logger.error(error);
 			return null;
 		}
 	}
 
-	setRelay(level:number) {
-		new RIO(18, "output", {value: level});
+	setRelay(level: number) {
+		new RIO(18, 'output', { value: level });
 
 		RIO.closeAll();
 	}
@@ -56,6 +52,7 @@ export class HardwareService {
 			{ name: 'RELAY_THREE', state: 'OFF' },
 			{ name: 'RELAY_FOUR', state: 'OFF' },
 		];
+
 		return config;
 	}
 
@@ -66,15 +63,4 @@ export class HardwareService {
 	private getRandomNumber = (min: number, max: number) => {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	};
-
-	private getAtmosphereData(): SensorDataResponse {
-		const temperature = this.getRandomNumber(70, 75);
-		const humidity = this.getRandomNumber(35, 40);
-
-		return {
-			scale: 'C',
-			temperature,
-			humidity,
-		};
-	}
 }
