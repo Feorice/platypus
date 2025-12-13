@@ -46,7 +46,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 					await this.sensorService.create(sensorData as Partial<SensorEntity>);
 					this.server.sockets.emit('sensor:DHT22', sensorData);
 				}
-				
 			}),
 		);
 
@@ -61,27 +60,14 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	startDefaultJobs() {
-		this.tasksService.startJob('sensor:DHT22')
-		this.tasksService.startJob('server:stats')
+		this.tasksService.startJob('sensor:DHT22');
+		this.tasksService.startJob('server:stats');
 	}
 
 	async handleConnection(client: Socket): Promise<void> {
-		// this.logger.log(`${client.id} connected`);
-
-		// const clientCount = (await this.server.sockets.fetchSockets()).length
-		// Logger.debug({clientCount})
-		// if (!clientCount) {
-		// 	this.tasksService.startJob('sensor:DHT22');
-		// 	this.tasksService.startJob('server:stats');
-		// }
 	}
 
 	async handleDisconnect(client: Socket): Promise<void> {
-		// this.logger.log(`${client.id} disconnected`);
-		// const clientCount = (await this.server.sockets.fetchSockets()).length;
 
-		// if (!clientCount) {
-		// 	this.tasksService.stopJob('sensor:DHT22');
-		// }
 	}
 }
