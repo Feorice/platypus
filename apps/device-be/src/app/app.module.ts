@@ -1,9 +1,11 @@
 import { join } from 'node:path';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import configuration from './config/configuration';
 import { TimerController } from './controllers/timer.controller';
 import { EntitiesModule } from './db/entities/entities.module';
 import { GatewaysModule } from './gateways/gatesways.module';
@@ -14,6 +16,9 @@ import { TimerService } from './services/timer.service';
 
 @Module({
 	imports: [
+		ConfigModule.forRoot({
+			load: [configuration],
+		}),
 		EntitiesModule,
 		TypeOrmModule.forRoot({
 			type: 'better-sqlite3',
