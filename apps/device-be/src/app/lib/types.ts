@@ -7,6 +7,7 @@ export type RelayState = 'ON' | 'OFF';
 export interface Relay {
 	name: RelayName;
 	state: RelayState;
+	pin: number;
 }
 export interface Timer {
 	id: number;
