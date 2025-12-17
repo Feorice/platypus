@@ -10,8 +10,8 @@ export class BootService implements OnApplicationBootstrap {
 		private timerRepository: Repository<TimerEntity>
 	) {}
 
-	onApplicationBootstrap() {
-		this.initTimers();
+	async onApplicationBootstrap() {
+		await this.initTimers();
 	}
 
 	async initTimers() {
