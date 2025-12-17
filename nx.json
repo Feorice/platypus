@@ -32,7 +32,10 @@
           "buildDepsName": "build-deps",
           "watchDepsName": "watch-deps"
         }
-      }
+      },
+      "exclude": [
+        "lib/rpi-io/*"
+      ]
     },
     {
       "plugin": "@nx/react/router-plugin",
@@ -84,6 +87,17 @@
       "exclude": [
         "apps/device-be-e2e/**/*"
       ]
+    },
+    {
+      "plugin": "@nx/js/typescript",
+      "include": [
+        "lib/rpi-io/*"
+      ],
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        }
+      }
     }
   ],
   "targetDefaults": {

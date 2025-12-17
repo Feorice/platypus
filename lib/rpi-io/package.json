@@ -1,0 +1,17 @@
+{
+	"name": "@types/rpi-io",
+	"version": "0.0.1",
+	"private": true,
+	"owners": [
+		{
+			"name": "Casey Brett Zelk",
+			"githubUsername": "Feorice"
+		}
+	],
+	"projects": [
+		"https://github.com/gdorbes/rpi-io#readme"
+	],
+	"devDependencies": {
+		"@types/rpi-io": "*"
+	}
+}
