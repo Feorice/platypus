@@ -13,7 +13,7 @@ declare namespace RPIIO {
 	}
 
 	class RIO {
-		static instances: Map<number, typeof this>;
+		static instances: Map<number, RIO>;
 
 		/** ------------------------------------------------------------------
 		 * @method constructor

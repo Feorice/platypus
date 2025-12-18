@@ -7,7 +7,7 @@ import type { CronJob } from 'cron';
 export class TasksService {
 	constructor(private schedulerRegistry: SchedulerRegistry) {}
 
-	private readonly logger = new Logger('TasksService');
+	// private readonly logger = new Logger('TasksService');
 
 	getJob(name: string): CronJob<null, null> | undefined {
 		const jobExists = this.schedulerRegistry.doesExist('cron', name);
@@ -19,7 +19,7 @@ export class TasksService {
 	}
 
 	addJob(name: string, job: CronJob) {
-		this.logger.log(`Adding cron job: ${name}`);
+		// this.logger.log(`Adding cron job: ${name}`);
 		const jobExists = this.schedulerRegistry.doesExist('cron', name);
 		if (!jobExists) {
 			this.schedulerRegistry.addCronJob(name, job);
@@ -27,7 +27,7 @@ export class TasksService {
 	}
 
 	startJob(name: string) {
-		this.logger.log(`Starting cron job: ${name}`);
+		// this.logger.log(`Starting cron job: ${name}`);
 		const jobExists = this.schedulerRegistry.doesExist('cron', name);
 		if (jobExists) {
 			const job = this.schedulerRegistry.getCronJob(name);
@@ -39,7 +39,7 @@ export class TasksService {
 	}
 
 	stopJob(name: string) {
-		this.logger.log(`Stopping cron job: ${name}`);
+		// this.logger.log(`Stopping cron job: ${name}`);
 		const jobExists = this.schedulerRegistry.doesExist('cron', name);
 		if (jobExists) {
 			const job = this.schedulerRegistry.getCronJob(name);

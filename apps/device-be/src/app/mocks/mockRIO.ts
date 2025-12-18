@@ -31,29 +31,36 @@ const defaultOptions: Options = {
 };
 
 export class RIO {
+	static instances: Map<number, RIO> = new Map();
 	private readonly line: number;
 	private readonly mode: ModeType;
 	private readonly options: Options;
 
-	constructor(line: number, mode: ModeType, options: Options = defaultOptions) {
-		console.log('MOCK RIO CLASS');
+	constructor(
+		line: number,
+		mode: RPIIO.ModeType,
+		options: Options = defaultOptions,
+	) {
+		// console.log('MOCK RIO CLASS');
 		this.line = line;
 		this.mode = mode;
 		this.options = options;
+
+		RIO.instances.set(line, this);
 	}
 
 	close() {
-		console.log('MOCK RIO close');
+		// console.log('MOCK RIO close');
 	}
 
 	closeAll() {
-		console.log('MOCK RIO closeAll');
+		// console.log('MOCK RIO closeAll');
 	}
 	write(value: 0 | 1) {
-		console.log('MOCK RIO write', { value, line: this.line, mode: this.mode });
+		// console.log('MOCK RIO write', { value, line: this.line, mode: this.mode });
 	}
 	read(): 0 | 1 {
-		console.log('MOCK RIO read');
+		// console.log('MOCK RIO read');
 		return 0;
 	}
 	monitoringStart(callback: () => void, edge: EdgeType, bounce: number = 0) {}

@@ -1,8 +1,8 @@
-import { createApi, fetchBaseQuery, retry } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
-	baseUrl: "http://192.168.86.96:3000/api",
+	baseUrl: 'http://localhost:3000/api',
 });
 
 const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 });
@@ -21,7 +21,7 @@ export const api = createApi({
 	 * Otherwise, a single API definition should be used in order to support tag invalidation,
 	 * among other features
 	 */
-	reducerPath: "splitApi",
+	reducerPath: 'splitApi',
 	/**
 	 * A bare-bones base query would just be `baseQuery: fetchBaseQuery({ baseUrl: '/' })`
 	 */
@@ -30,7 +30,7 @@ export const api = createApi({
 	 * Tag types must be defined in the original API definition
 	 * for any tags that would be provided by injected endpoints
 	 */
-	tagTypes: ["Timers", "Sensors"],
+	tagTypes: ['Timers', 'Sensors'],
 	/**
 	 * This api has endpoints injected in adjacent files,
 	 * which is why no endpoints are shown below.

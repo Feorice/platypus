@@ -12,10 +12,11 @@ import type { DeleteResult, UpdateResult } from 'typeorm';
 // biome-ignore lint/style/useImportType: <explanation>
 import { TimerEntity } from '../db/entities/timer.entity';
 // biome-ignore lint/style/useImportType: <explanation>
+import { HardwareService } from '../services/hardware.service';
+// biome-ignore lint/style/useImportType: <explanation>
 import { TasksService } from '../services/tasks.service';
 // biome-ignore lint/style/useImportType: <explanation>
 import { TimerResponse, TimerService } from '../services/timer.service';
-import { HardwareService } from '../services/hardware.service';
 
 @Controller('timer')
 export class TimerController {
@@ -30,6 +31,7 @@ export class TimerController {
 		return this.timerService.findAll();
 	}
 
+	// Probably don't need this anymore since we create these on startup now.
 	@Post('create')
 	async create(@Body() entityData: TimerEntity): Promise<TimerResponse> {
 		const data = {
@@ -78,16 +80,17 @@ export class TimerController {
 		const entityResponse = await this.timerService.findOne(entityData.id);
 		const entity = entityResponse.timers[0];
 
-		const startTimer = this.taskService.getJob(`${entity.relay}:START`);
-		const endTimer = this.taskService.getJob(`${entity.relay}:END`);
-		console.log('update timers', entity);
+		const startTimer = this.taskService.getJob(
+			`${entity.name}:${entity.relayName}:START`,
+		);
+		const endTimer = this.taskService.getJob(
+			`${entity.name}:${entity.relayName}:END`,
+		);
 		const startTime = new Date(entityData.startTime);
 		const endTime = new Date(entityData.endTime);
 		const cronStartTime = `${startTime.getMinutes()} ${startTime.getHours()} * * *`;
 		const cronEndTime = `${endTime.getMinutes()} ${endTime.getHours()} * * *`;
 
-		console.log('startCron', startTimer || 'shits undefined');
-		console.log('endCron', endTimer || 'shits undefined');
 		if (startTimer) {
 			startTimer.setTime(new CronTime(cronStartTime));
 		}
