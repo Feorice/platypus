@@ -58,19 +58,6 @@ export class HardwareService {
 		rio.closeAll();
 	}
 
-	getRelayDefaultConfig() {
-		// const config: Relay[] = [
-		// 	{ name: 'RELAY_ONE', state: 'OFF' },
-		// 	{ name: 'RELAY_TWO', state: 'OFF' },
-		// 	{ name: 'RELAY_THREE', state: 'OFF' },
-		// 	{ name: 'RELAY_FOUR', state: 'OFF' },
-		// ];
-		//
-		// return config;
-		const relayOptions = this.configService.get('relayOptions');
-		Logger.debug(relayOptions);
-	}
-
 	setRelayState(relayName: RelayName, state: RelayState) {
 		Logger.debug('setRelayState', { relayName, state });
 	}
