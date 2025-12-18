@@ -14,7 +14,7 @@ let GPIO: typeof RIO;
 	try {
 		// @ts-expect-error
 		GPIO = (await import('rpi-io')).RIO;
-	} catch {
+	} catch (error) {
 		Logger.debug('Not a Raspberry PI platform. Using mock rpi-io.');
 		GPIO = (await import('../mocks/mockRIO.js')).RIO;
 	}
@@ -69,20 +69,20 @@ export class HardwareService {
 		if (relayOptions?.length) {
 			relayOptions.forEach((relay) => {
 				Logger.debug(`Initializing ${relay.name} on pin ${relay.pin}`);
-				new RIO(relay.pin, relay.mode, { value: relay.value });
+				new GPIO(relay.pin, relay.mode);
 			});
 
-			return RIO.instances;
+			return GPIO.instances;
 		}
 
 		return undefined;
 	}
 
 	setRelay(pin: number, level: 0 | 1) {
-		const relay = RIO.instances.get(pin);
+		const relay = GPIO.instances.get(pin);
 
 		if (relay) {
-			// Logger.debug(`Relay ${pin} relay level ${level}`);
+			Logger.debug(`Relay ${pin} relay level ${level}`);
 			relay.write(level);
 		}
 	}

@@ -53,11 +53,11 @@ export class RIO {
 		// console.log('MOCK RIO close');
 	}
 
-	closeAll() {
-		// console.log('MOCK RIO closeAll');
+	static closeAll() {
+		console.log('MOCK RIO closeAll');
 	}
 	write(value: 0 | 1) {
-		// console.log('MOCK RIO write', { value, line: this.line, mode: this.mode });
+		console.log('MOCK RIO write', { value, line: this.line, mode: this.mode });
 	}
 	read(): 0 | 1 {
 		// console.log('MOCK RIO read');

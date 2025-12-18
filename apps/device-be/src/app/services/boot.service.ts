@@ -1,6 +1,6 @@
 import {
 	Injectable,
-	type OnApplicationBootstrap,
+	type OnApplicationBootstrap, Logger
 } from '@nestjs/common';
 // biome-ignore lint/style/useImportType: <explanation>
 import { ConfigService } from '@nestjs/config';
@@ -115,8 +115,10 @@ export class BootService implements OnApplicationBootstrap {
 				currentTime.getTime() > startingTimer.getTime() &&
 				currentTime.getTime() < endingTimer.getTime()
 			) {
+				Logger.debug('turning on relay')
 				this.hardwareService.setRelay(timer.relayPin, 0);
 			} else {
+				Logger.debug('turning off relay')
 				this.hardwareService.setRelay(timer.relayPin, 1);
 			}
 
