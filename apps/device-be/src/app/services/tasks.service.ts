@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 // biome-ignore lint/style/useImportType: <Nest does not like it when this is import type>
 import { SchedulerRegistry } from '@nestjs/schedule';
 import type { CronJob } from 'cron';

@@ -1,9 +1,9 @@
 export interface ITimer {
+	id: string;
 	name?: string;
-	relay?: string;
-	id?: string;
 	enabled?: boolean;
 	isOn?: boolean;
+	hidden?: boolean;
 	startTime: string;
 	endTime: string;
 }

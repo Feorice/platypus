@@ -1,4 +1,4 @@
-type ModeType = 'input' | 'output';
+type ModeType = 'input' | 'output' | 'pwm';
 type BiasType = 'disabled' | 'pull-up' | 'pull-down';
 type EdgeType = 'rising' | 'falling' | 'both';
 interface Options {
@@ -30,27 +30,28 @@ const defaultOptions: Options = {
 	dutyMax: 20000,
 };
 
+// This mock is ONLY used when running backend on a system that doesn't support the rpi-io package.
+// The rpi-io package relies on certain GPIO packages which are only available on the Raspberry PI.
+// This only includes a mock of the main RIO class from rpi-io and not any of the other importable functions.
 export class RIO {
 	static instances: Map<number, RIO> = new Map();
 	private readonly line: number;
 	private readonly mode: ModeType;
+	// @ts-expect-error
 	private readonly options: Options;
 
-	constructor(
-		line: number,
-		mode: RPIIO.ModeType,
-		options: Options = defaultOptions,
-	) {
-		// console.log('MOCK RIO CLASS');
+	constructor(line: number, mode: ModeType, opt: Options = defaultOptions) {
+		console.log('MOCK RIO CLASS');
+
 		this.line = line;
 		this.mode = mode;
-		this.options = options;
+		this.options = opt;
 
 		RIO.instances.set(line, this);
 	}
 
 	close() {
-		// console.log('MOCK RIO close');
+		console.log('MOCK RIO close');
 	}
 
 	static closeAll() {
@@ -60,7 +61,7 @@ export class RIO {
 		console.log('MOCK RIO write', { value, line: this.line, mode: this.mode });
 	}
 	read(): 0 | 1 {
-		// console.log('MOCK RIO read');
+		console.log('MOCK RIO read');
 		return 0;
 	}
 	monitoringStart(callback: () => void, edge: EdgeType, bounce: number = 0) {}

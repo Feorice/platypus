@@ -1,13 +1,14 @@
 import {
 	Injectable,
-	type OnApplicationBootstrap, Logger
+	Logger,
+	type OnApplicationBootstrap,
 } from '@nestjs/common';
 // biome-ignore lint/style/useImportType: <explanation>
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
 import type { ModeType } from 'rpi-io';
-import type { Repository } from 'typeorm';
+import type { InsertResult, Repository } from 'typeorm';
 import { RelayName, TimerEntity } from '../db/entities/timer.entity';
 // biome-ignore lint/style/useImportType: <explanation>
 import { HardwareService } from './hardware.service';
@@ -39,15 +40,14 @@ export class BootService implements OnApplicationBootstrap {
 		const instances = this.hardwareService.initializeRelays();
 
 		if (instances) {
-			const promises = [];
+			const promises: Promise<InsertResult | null>[] = [];
 
 			const relayOptions: RelayOption[] | undefined =
 				this.configService.get('relayOptions');
 
 			if (relayOptions) {
-				relayOptions.forEach((relayOption) => {
+				relayOptions.forEach((relayOption, index) => {
 					const instance = instances.get(relayOption.pin);
-
 					if (instance) {
 						promises.push(
 							this.timerRepository
@@ -55,7 +55,7 @@ export class BootService implements OnApplicationBootstrap {
 								.insert()
 								.into(TimerEntity)
 								.values({
-									name: relayOption.name,
+									name: `Timer ${index + 1}`,
 									relayPin: relayOption.pin,
 									relayName: RelayName[relayOption.name],
 								})
@@ -65,7 +65,8 @@ export class BootService implements OnApplicationBootstrap {
 					}
 				});
 
-				await Promise.all(promises);
+				// Sequentially create timer records.
+				for (const promise of promises) await promise;
 			}
 		}
 
@@ -115,10 +116,10 @@ export class BootService implements OnApplicationBootstrap {
 				currentTime.getTime() > startingTimer.getTime() &&
 				currentTime.getTime() < endingTimer.getTime()
 			) {
-				Logger.debug('turning on relay')
+				Logger.debug('turning on relay');
 				this.hardwareService.setRelay(timer.relayPin, 0);
 			} else {
-				Logger.debug('turning off relay')
+				Logger.debug('turning off relay');
 				this.hardwareService.setRelay(timer.relayPin, 1);
 			}
 

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
 	DeleteResult,
+	FindManyOptions,
 	QueryFailedError,
 	Repository,
 	UpdateResult,
@@ -23,8 +24,15 @@ export class TimerService {
 		private timerRepository: Repository<TimerEntity>,
 	) {}
 
-	async findAll(): Promise<TimerResponse> {
-		const timers = await this.timerRepository.find();
+	async findAll(findOptions: { hidden?: boolean }): Promise<TimerResponse> {
+		const options: FindManyOptions<TimerEntity> = {
+			where: {
+				...findOptions,
+			},
+		};
+
+		const timers = await this.timerRepository.find(options);
+
 		return {
 			timers: timers,
 			ok: true,
@@ -80,8 +88,11 @@ export class TimerService {
 		}
 	}
 
-	async update(entity: TimerEntity): Promise<UpdateResult> {
-		return await this.timerRepository.update(entity.id, entity);
+	async update(
+		id: number,
+		entity: Partial<TimerEntity>,
+	): Promise<UpdateResult> {
+		return await this.timerRepository.update(id, entity);
 	}
 
 	async delete(id: number): Promise<DeleteResult> {

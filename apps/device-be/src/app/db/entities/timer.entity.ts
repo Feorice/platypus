@@ -38,4 +38,7 @@ export class TimerEntity {
 
 	@CreateDateColumn({ default: '1969-01-01T00:00:00.000Z' })
 	endTime: Date;
+
+	@Column({ default: false })
+	hidden: boolean;
 }
