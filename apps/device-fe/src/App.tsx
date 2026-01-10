@@ -1,8 +1,8 @@
 import logo from "@assets/images/logo.svg";
 import { useDHT22SensorEventsQuery } from "@state/api/socketApi";
 import { decrement, increment } from "@state/features/counter/counterSlice";
+import type { RootState } from "@state/hooks";
 import { useAppDispatch, useAppSelector } from "@state/hooks";
-import type { RootState } from "@state/store";
 import Atmosphere from "@/components/Atmosphere";
 
 function App() {
