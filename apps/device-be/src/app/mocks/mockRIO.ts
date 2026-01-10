@@ -64,6 +64,12 @@ export class RIO {
 		console.log('MOCK RIO read');
 		return 0;
 	}
-	monitoringStart(callback: () => void, edge: EdgeType, bounce: number = 0) {}
+	monitoringStart(
+		cb: (event: EdgeType) => void,
+		edge?: EdgeType | undefined,
+		bounce?: number | undefined,
+	) {}
 	monitoringStop() {}
+	pwmStop() {}
+	pwmDuty(percent: number) {}
 }

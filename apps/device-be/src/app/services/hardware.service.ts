@@ -3,22 +3,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Sensor from 'node-dht-sensor';
 import { ModeType } from 'rpi-io';
+import { GPIO } from '../lib/gpio';
 import type { RelayName, RelayState } from '../lib/types';
-import { RIO } from '../mocks/mockRIO';
-
-let GPIO: typeof RIO;
-
-// rpi-io is an optional package because it only supports linux.
-// This is a workaround to allow us to mock the package when not on a linux os.
-(async () => {
-	try {
-		// @ts-expect-error
-		GPIO = (await import('rpi-io')).RIO;
-	} catch (error) {
-		Logger.debug('Not a Raspberry PI platform. Using mock rpi-io.');
-		GPIO = (await import('../mocks/mockRIO.js')).RIO;
-	}
-})();
 
 @Injectable()
 export class HardwareService {
