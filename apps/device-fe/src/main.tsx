@@ -14,6 +14,7 @@ import { store } from "@state/store.ts";
 import { Provider } from "react-redux";
 import App from "./App.tsx";
 import Header from "./components/Header.tsx";
+import Settings from "./pages/Settings.tsx";
 import Status from "./pages/Status.tsx";
 import Test from "./pages/Test.tsx";
 import Timers from "./pages/Timers.tsx";
@@ -53,11 +54,18 @@ const timersRoute = createRoute({
 	component: Timers,
 });
 
+const settingsRoute = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/settings",
+	component: Settings,
+});
+
 const routeTree = rootRoute.addChildren([
 	indexRoute,
 	testRoute,
 	statusRoute,
 	timersRoute,
+	settingsRoute,
 ]);
 
 const router = createRouter({
