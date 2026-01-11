@@ -25,5 +25,10 @@
       "@/*": ["./src/*"],
       "@state/*": ["./src/state/*"]
     }
-  }
+  },
+  "references": [
+    {
+      "path": "../../lib/react-components"
+    }
+  ]
 }

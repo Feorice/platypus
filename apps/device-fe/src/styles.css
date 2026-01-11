@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source '../../../node_modules/@klez/react-components/dist';
 
 @import 'tw-animate-css';
 
