@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+/* The following source is required to include Tailwind styles from the react-components library. */
 @source '../../../node_modules/@klez/react-components/dist';
 
 @import 'tw-animate-css';
