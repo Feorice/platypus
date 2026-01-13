@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite'
+import {fileURLToPath, URL} from "node:url";
 
 export default defineConfig(() => ({
   root: __dirname,
@@ -34,6 +35,12 @@ export default defineConfig(() => ({
     rollupOptions: {
       // External packages that should not be bundled into your library.
       external: ['react','react-dom','react/jsx-runtime']
+    },
+  },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@shadcn': fileURLToPath(new URL('./src/shadcn', import.meta.url)),
     },
   },
 }));

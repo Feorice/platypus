@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ReactComponents  } from './react-components';
+import { ReactComponents  } from '../../lib/react-components';
 import { expect } from 'storybook/test';
 
 const meta = {

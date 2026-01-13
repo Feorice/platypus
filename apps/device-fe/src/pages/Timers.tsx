@@ -6,7 +6,7 @@ import {
 import type { ITimer } from '@/lib/types.ts';
 import ClientClock from '../components/client-clock.tsx';
 import { DialogDemo } from '../components/create-timer-dialog.tsx';
-import { Timer } from '../components/Timer.tsx';
+import { Timer } from '@klez/react-components'
 
 const TimersPage = () => {
 	const { data } = useGetTimersQuery({ hidden: false });
