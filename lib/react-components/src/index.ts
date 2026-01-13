@@ -1,2 +1,2 @@
-import './tailwind.css';
+import './styles.css';
 export * from './lib/react-components';
