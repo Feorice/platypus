@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const ClientClock = () => {
 	const [currentTime, setCurrentTime] = useState(new Date());
@@ -13,10 +13,7 @@ const ClientClock = () => {
 	}, []);
 
 	return (
-		<div>
-			<h1>Client Clock</h1>
-			<p>{currentTime.toLocaleTimeString()}</p>
-		</div>
+		<div className="flex items-center">{currentTime.toLocaleTimeString()}</div>
 	);
 };
 
