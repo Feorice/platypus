@@ -37,24 +37,27 @@ export function Timer({
 	enableChange: (id: string, enable: boolean) => void;
 	onUpdate?: (values: { range: DateTimeRange; id: string }) => void;
 }) {
+	const currentTime = new Date();
+	let startTime = set(currentTime, {
+		hours: getHours(timer.startTime),
+		minutes: getMinutes(timer.startTime),
+	});
+	let endTime = set(currentTime, {
+		hours: getHours(timer.endTime),
+		minutes: getMinutes(timer.endTime),
+	});
+
 	const handleCheckedChange = (checked: boolean) => {
 		enableChange(timer.id, checked);
 	};
+
+	const isTimerOn =
+		isAfter(currentTime, startTime) && isBefore(currentTime, endTime);
 
 	const timerStatus = () => {
 		if (!timer.enabled) {
 			return 'Disabled';
 		}
-
-		const currentTime = new Date();
-		let startTime = set(currentTime, {
-			hours: getHours(timer.startTime),
-			minutes: getMinutes(timer.startTime),
-		});
-		let endTime = set(currentTime, {
-			hours: getHours(timer.endTime),
-			minutes: getMinutes(timer.endTime),
-		});
 
 		if (startTime > endTime) {
 			endTime = addDays(endTime, 1);
@@ -64,7 +67,7 @@ export function Timer({
 			startTime = addDays(startTime, 1);
 		}
 		//debugger;
-		if (isAfter(currentTime, startTime) && isBefore(currentTime, endTime)) {
+		if (isTimerOn) {
 			return `Stops in ${formatDistance(currentTime, endTime)}`;
 		} else {
 			return `Starts in ${formatDistance(currentTime, startTime)}`;
@@ -106,7 +109,7 @@ export function Timer({
 							</div>
 							{/* Manual Turn On Section */}
 							<div>
-								<Button>Turn On</Button>
+								<Button>{isTimerOn ? 'Turn Off' : 'Turn On'}</Button>
 							</div>
 						</div>
 
