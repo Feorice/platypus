@@ -12,6 +12,7 @@ import ReactDOM from "react-dom/client";
 import "./styles.css";
 import { store } from "@state/store.ts";
 import { Provider } from "react-redux";
+import AtmospherePage from "@/pages/Atmosphere.tsx";
 import App from "./App.tsx";
 import Header from "./components/Header.tsx";
 import Settings from "./pages/Settings.tsx";
@@ -60,12 +61,19 @@ const settingsRoute = createRoute({
 	component: Settings,
 });
 
+const atmospherePage = createRoute({
+	getParentRoute: () => rootRoute,
+	path: "/atmosphere",
+	component: AtmospherePage,
+});
+
 const routeTree = rootRoute.addChildren([
 	indexRoute,
 	testRoute,
 	statusRoute,
 	timersRoute,
 	settingsRoute,
+	atmospherePage,
 ]);
 
 const router = createRouter({
