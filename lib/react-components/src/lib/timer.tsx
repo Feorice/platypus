@@ -41,7 +41,11 @@ export function Timer({
 		enableChange(timer.id, checked);
 	};
 
-	const timeResults = () => {
+	const timerStatus = () => {
+		if (!timer.enabled) {
+			return 'Disabled';
+		}
+
 		const currentTime = new Date();
 		let startTime = set(currentTime, {
 			hours: getHours(timer.startTime),
@@ -61,7 +65,7 @@ export function Timer({
 		}
 		//debugger;
 		if (isAfter(currentTime, startTime) && isBefore(currentTime, endTime)) {
-			return `Ends in ${formatDistance(currentTime, endTime)}`;
+			return `Stops in ${formatDistance(currentTime, endTime)}`;
 		} else {
 			return `Starts in ${formatDistance(currentTime, startTime)}`;
 		}
@@ -106,11 +110,11 @@ export function Timer({
 							</div>
 						</div>
 
-						<Activity mode={timeResults() ? 'visible' : 'hidden'}>
+						<Activity mode={timerStatus() ? 'visible' : 'hidden'}>
 							<div className="text-center">
 								<div className="font-semibold">Status</div>
 								<Separator />
-								<div className="mt-2">{timeResults()}</div>
+								<div className="mt-2">{timerStatus()}</div>
 							</div>
 						</Activity>
 					</div>
