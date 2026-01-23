@@ -1,52 +1,35 @@
-import { useEnableTimerMutation, useGetTimersQuery } from '@state/api/data';
-import {
-	useCreateTimerMutation,
-	useUpdateTimerMutation,
-} from '@state/api/data.ts';
-import type { ITimer } from '@/lib/types.ts';
-import ClientClock from '../components/client-clock.tsx';
-import { DialogDemo } from '../components/create-timer-dialog.tsx';
-import { Timer } from '@klez/react-components'
+import { Timer } from "@klez/react-components";
+import { useEnableTimerMutation, useGetTimersQuery } from "@state/api/data";
+import { useUpdateTimerMutation } from "@state/api/data.ts";
+import type { DateTimeRange } from "@/components/time-range-picker.tsx";
+import type { ITimer } from "@/lib/types.ts";
+import ClientClock from "../components/client-clock.tsx";
 
 const TimersPage = () => {
 	const { data } = useGetTimersQuery({ hidden: false });
-	const [enableTimer, results] = useEnableTimerMutation();
-	const [updateTimer, updateTimerResult] = useUpdateTimerMutation();
-	const [createTimer, createTimerResult] = useCreateTimerMutation();
+	const [enableTimer] = useEnableTimerMutation();
+	const [updateTimer] = useUpdateTimerMutation();
 
 	const handleEnableTimer = (id: string, enabled: boolean) => {
 		enableTimer({ id, enabled });
 		console.log(`Enable timer with id ${id} ${enabled}`);
 	};
 
-	const onUpdateTimer = (update) => {
-		console.log('update', update);
-		if (update?.range) {
-			const timer: Partial<ITimer> & Pick<ITimer, 'id'> = {
+	const onUpdateTimer = (update: { id: string; range: DateTimeRange }) => {
+		console.log("update", update);
+		if (update.range) {
+			const timer: Partial<ITimer> & Pick<ITimer, "id"> = {
 				id: update.id,
-				startTime: update.range.from,
-				endTime: update.range.to,
+				startTime: update.range.from?.toString(),
+				endTime: update.range.to?.toString(),
 			};
 			updateTimer(timer);
 		}
 	};
 
-	const handleCreateTimer = (event) => {
-		const createData: ITimer = {
-			startTime: event.timeRange.from,
-			endTime: event.timeRange.to,
-			enabled: event.enabled,
-			relay: 'TEST_RELAY',
-			name: event.name,
-			isOn: false,
-		};
-		console.log('create timer event', event);
-		createTimer(createData);
-	};
-
 	const timersList = () => {
 		return data?.timers?.map((timer) => (
-			<div key={timer.id} className="w-65 p-1">
+			<div key={timer.id} className="w-75">
 				<Timer
 					onUpdate={onUpdateTimer}
 					timer={timer}
@@ -57,11 +40,10 @@ const TimersPage = () => {
 	};
 	return (
 		<>
-			<div>TIMERS PAGE</div>
-			<DialogDemo onSubmit={handleCreateTimer} />
 			<ClientClock />
-
-			<div className="flex flex-row">{timersList()}</div>
+			<div className="flex flex-wrap gap-6 justify-center pb-6">
+				{timersList()}
+			</div>
 		</>
 	);
 };
