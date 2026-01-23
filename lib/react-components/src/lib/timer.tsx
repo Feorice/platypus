@@ -1,15 +1,30 @@
-import type { ComponentProps } from "react";
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/shadcn/components/ui/card";
-import { Field, FieldGroup } from "@/shadcn/components/ui/field";
-import { Label } from "@/shadcn/components/ui/label";
-import type { ITimer } from "@/lib/types.ts";
-import { cn } from "@/shadcn/lib/utils";
+import {
+	addDays,
+	formatDistance,
+	getHours,
+	getMinutes,
+	isAfter,
+	isBefore,
+	set,
+} from 'date-fns';
+import type { ComponentProps } from 'react';
+import { Activity } from 'react';
+import type { ITimer } from '@/lib/types.ts';
 import {
 	type DateTimeRange,
 	TimeRangePicker,
-} from "@/shadcn/components/time-range-picker";
-import { Checkbox } from "@/shadcn/components/ui/checkbox";
+} from '@/shadcn/components/time-range-picker';
+import { Button } from '@/shadcn/components/ui/button';
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from '@/shadcn/components/ui/card';
+import { Label } from '@/shadcn/components/ui/label';
+import { Separator } from '@/shadcn/components/ui/separator';
+import { Switch } from '@/shadcn/components/ui/switch';
+import { cn } from '@/shadcn/lib/utils';
 
 export function Timer({
 	className,
@@ -17,7 +32,7 @@ export function Timer({
 	onUpdate,
 	enableChange,
 	...props
-}: ComponentProps<"div"> & {
+}: ComponentProps<'div'> & {
 	timer: ITimer;
 	enableChange: (id: string, enable: boolean) => void;
 	onUpdate?: (values: { range: DateTimeRange; id: string }) => void;
@@ -26,36 +41,79 @@ export function Timer({
 		enableChange(timer.id, checked);
 	};
 
+	const timeResults = () => {
+		const currentTime = new Date();
+		let startTime = set(currentTime, {
+			hours: getHours(timer.startTime),
+			minutes: getMinutes(timer.startTime),
+		});
+		let endTime = set(currentTime, {
+			hours: getHours(timer.endTime),
+			minutes: getMinutes(timer.endTime),
+		});
+
+		if (startTime > endTime) {
+			endTime = addDays(endTime, 1);
+		}
+
+		if (currentTime > endTime) {
+			startTime = addDays(startTime, 1);
+		}
+		//debugger;
+		if (isAfter(currentTime, startTime) && isBefore(currentTime, endTime)) {
+			return `Ends in ${formatDistance(currentTime, endTime)}`;
+		} else {
+			return `Starts in ${formatDistance(currentTime, startTime)}`;
+		}
+	};
+
 	return (
-		<div className={cn("flex flex-col gap-6", className)} {...props}>
-			<Card>
-				<CardHeader className="text-center">
-					<CardTitle className="text-xl">{timer?.name}</CardTitle>
+		<div className={cn('flex flex-col gap-6 max-w-75', className)} {...props}>
+			<Card className={'dark:bg-gray-800 gap-4'}>
+				<CardHeader className="text-center gap-0">
+					<CardTitle
+						data-testid="title"
+						className="subpixel-antialiased scroll-m-20 text-xl font-semibold tracking-tight"
+					>
+						{timer?.name}
+					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<form>
-						<FieldGroup>
-							<Field>
-								<TimeRangePicker
-									onUpdate={(update) =>
-										onUpdate?.({ range: update.range, id: timer.id })
-									}
-									initialDateFrom={new Date(timer?.startTime)}
-									initialDateTo={new Date(timer?.endTime)}
-								/>
+					<div className="flex flex-col gap-4">
+						<div className="[&>*]:w-full">
+							<TimeRangePicker
+								onUpdate={(update) =>
+									onUpdate?.({ range: update.range, id: timer.id })
+								}
+								initialDateFrom={new Date(timer?.startTime)}
+								initialDateTo={new Date(timer?.endTime)}
+							/>
+						</div>
 
-								<div className="flex items-center gap-3">
-									{/** biome-ignore lint/correctness/useUniqueElementIds: <explanation> */}
-									<Checkbox
-										id="enabled"
-										checked={timer?.enabled}
-										onCheckedChange={handleCheckedChange}
-									/>
-									<Label htmlFor="enable">Enable</Label>
-								</div>
-							</Field>
-						</FieldGroup>
-					</form>
+						<div className="flex justify-between">
+							{/* Enable Section */}
+							<div className="flex items-center space-x-2">
+								<Switch
+									checked={timer.enabled}
+									onCheckedChange={handleCheckedChange}
+									id="enable"
+								/>
+								<Label htmlFor="enable">Enable</Label>
+							</div>
+							{/* Manual Turn On Section */}
+							<div>
+								<Button>Turn On</Button>
+							</div>
+						</div>
+
+						<Activity mode={timeResults() ? 'visible' : 'hidden'}>
+							<div className="text-center">
+								<div className="font-semibold">Status</div>
+								<Separator />
+								<div className="mt-2">{timeResults()}</div>
+							</div>
+						</Activity>
+					</div>
 				</CardContent>
 			</Card>
 		</div>
