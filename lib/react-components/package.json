@@ -16,5 +16,8 @@
   },
   "nx": {
     "name": "react-components"
+  },
+  "dependencies": {
+    "@radix-ui/react-switch": "^1.2.6"
   }
 }
