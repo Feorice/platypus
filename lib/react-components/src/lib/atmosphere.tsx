@@ -20,14 +20,15 @@ export const Atmosphere = ({
 	...props
 }: ComponentProps<'div'> & {
 	title: string;
-	temperature: string;
-	humidity: string;
+	temperature: number;
+	humidity: number;
 	scale: 'C' | 'F';
 }) => {
 	const formattedTemperature =
 		scale === 'F'
-			? ((9 / 5) * parseInt(temperature, 10) + 32).toString()
-			: temperature;
+			? ((9 / 5) * temperature + 32).toString()
+			: temperature.toString();
+	const humidityString = humidity.toString();
 
 	return (
 		<div className={cn('flex flex-col gap-6 max-w-75', className)} {...props}>
@@ -39,7 +40,7 @@ export const Atmosphere = ({
 				<CardContent>
 					<div className="flex justify-center gap-2">
 						<Temperature temperature={formattedTemperature} scale={scale} />
-						<Humidity humidity={humidity} />
+						<Humidity humidity={humidityString} />
 					</div>
 				</CardContent>
 			</Card>

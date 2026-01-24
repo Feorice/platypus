@@ -12,9 +12,9 @@ interface Event<T> {
 }
 
 export interface DHT22Data {
-	temperature?: number;
-	humidity?: number;
-	scale?: "C" | "F";
+	temperature: number;
+	humidity: number;
+	scale: "C" | "F";
 }
 
 const socket = io("http://localhost:3000", {
