@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import Atmosphere from '../../lib/atmosphere';
+import { Atmosphere } from '../../lib/atmosphere';
 
 const meta = {
 	component: Atmosphere,

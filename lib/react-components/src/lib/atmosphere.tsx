@@ -11,7 +11,7 @@ import {
 } from '@/shadcn/components/ui/card';
 import { cn } from '@/shadcn/lib/utils.ts';
 
-const Atmosphere = ({
+export const Atmosphere = ({
 	className,
 	title,
 	temperature,
@@ -84,5 +84,3 @@ const Humidity = ({ humidity }: { humidity: string }) => {
 		</div>
 	);
 };
-
-export default Atmosphere;
