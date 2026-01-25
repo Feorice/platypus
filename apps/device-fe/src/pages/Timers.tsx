@@ -41,9 +41,11 @@ const TimersPage = () => {
 	return (
 		<>
 			<ClientClock />
-			<div className="flex flex-wrap gap-6 justify-center pb-6">
-				{timersList()}
-			</div>
+      <div className="flex justify-center mt-6">
+        <div className="grid grid-cols-2 gap-6 justify-center">
+				  {timersList()}
+			  </div>
+      </div>
 		</>
 	);
 };
