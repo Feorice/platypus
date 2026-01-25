@@ -9,7 +9,7 @@ import type { RelayName, RelayState } from '../lib/types';
 @Injectable()
 export class HardwareService {
 	constructor(private configService: ConfigService) {}
-	async getSensorData() {
+	async getSensorData(type: 11 | 22, pin: number) {
 		const sensorPromise = Sensor.promises;
 		sensorPromise.setMaxRetries(10);
 
@@ -25,11 +25,11 @@ export class HardwareService {
 
 			sensorPromise.initialize(testOptions);
 		} else {
-			sensorPromise.initialize(22, 17);
+			sensorPromise.initialize(type, pin);
 		}
 
 		try {
-			const data = await sensorPromise.read(22, 17);
+			const data = await sensorPromise.read(type, pin);
 
 			return {
 				scale: 'C',
@@ -78,6 +78,6 @@ export class HardwareService {
 	}
 
 	private getRandomNumber = (min: number, max: number) => {
-		return Math.floor(Math.random() * (max - min + 1)) + min;
+		return Math.floor(Math.random() * new Date().getMilliseconds() / 2 * (max - min + 1)) + min;
 	};
 }

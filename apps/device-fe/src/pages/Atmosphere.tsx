@@ -1,16 +1,33 @@
 import { Atmosphere } from "@klez/react-components";
-import { useDHT22SensorEventsQuery } from "@state/api/socketApi.ts";
+import { useSensorEventsQuery } from "@state/api/socketApi.ts";
 
 const AtmospherePage = () => {
-	const { data: sensor } = useDHT22SensorEventsQuery();
+	const { data = [] } = useSensorEventsQuery();
+
+	if (!data.length) {
+		return <div>No sensor data.</div>;
+	}
+
 	return (
-		<Atmosphere
-			title="Sensor"
-			temperature={sensor?.temperature || 0}
-			humidity={sensor?.humidity || 0}
-			scale={sensor?.scale || "C"}
-		/>
+		<div className="flex justify-center mt-6">
+			<div className="grid grid-cols-2 gap-6 justify-center">
+				{data.map((data, index) => {
+					const key = index + 1;
+					return (
+            <Atmosphere
+							key={key}
+							title="Sensor"
+							temperature={data?.temperature || 0}
+							humidity={data?.humidity || 0}
+							scale={data?.scale || "C"}
+						/>
+					);
+				})}
+			</div>
+		</div>
 	);
+
+	return <>No sensors found.</>;
 };
 
 export default AtmospherePage;

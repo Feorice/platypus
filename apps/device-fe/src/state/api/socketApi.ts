@@ -11,7 +11,7 @@ interface Event<T> {
 	data: T;
 }
 
-export interface DHT22Data {
+export interface SensorData {
 	temperature: number;
 	humidity: number;
 	scale: "C" | "F";
@@ -66,9 +66,12 @@ export const SocketApi = createApi({
 		// 		};
 		// 	},
 		// }),
-		DHT22SensorEvents: build.query<DHT22Data, void>({
+		sensorEvents: build.query<SensorData[], void>({
 			queryFn() {
-				return { data: { temperature: 0, humidity: 0, scale: "C" } };
+				// Initial data before we actually retrieve anything.
+				return {
+					data: [],
+				};
 			},
 			// async onQueryStarted(_arg, { dispatch }) {
 			// 	socket.on("connect_error", (e) => {
@@ -84,18 +87,16 @@ export const SocketApi = createApi({
 				dispatcher = dispatch;
 				await connected(dispatcher);
 
-				const listener = (data: DHT22Data) => {
+				const listener = (data: SensorData[]) => {
 					updateCachedData((currentCacheData) => {
-						return {
-							...currentCacheData,
-							...data,
-						};
+            console.log(data)
+						return data?.length ? data : currentCacheData;
 					});
 				};
 
-				socket.on("sensor:DHT22", listener);
+				socket.on("sensors", listener);
 				await cacheEntryRemoved;
-				socket.off("sensor:DHT22", listener);
+				socket.off("sensors", listener);
 			},
 		}),
 		timerEvents: build.query({
@@ -184,7 +185,7 @@ export const SocketApi = createApi({
 
 export const {
 	// useSendEventMutation,
-	useDHT22SensorEventsQuery,
+	useSensorEventsQuery,
 	useStatusQuery,
 	useLazyRetryQuery,
 	useServerStatsEventsQuery,
